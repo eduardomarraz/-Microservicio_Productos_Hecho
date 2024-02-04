@@ -1,0 +1,21 @@
+﻿@Microservicio_Productos_HostAddress = https://localhost:7070
+
+GET {{Microservicio_Productos_HostAddress}}/api/products
+
+###
+
+POST {{Microservicio_Productos_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "casa6",
+  "price": 0,
+  "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa5"
+}
+
+###
+
+GET {{Microservicio_Productos_HostAddress}}/api/products
+
+###

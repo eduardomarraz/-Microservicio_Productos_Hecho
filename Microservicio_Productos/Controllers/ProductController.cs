@@ -50,7 +50,7 @@ namespace Microservicio_Productos.Controllers
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
         }
 
-        
+
         [HttpGet("{guid}")]
         public IActionResult GetProductsId(Guid guid)
         {
@@ -62,12 +62,24 @@ namespace Microservicio_Productos.Controllers
             }
 
             return Ok(_mapper.Map<IEnumerable<ProductDto>>(product));
- 
+
         }
+        //[HttpPost]  //Este funciona, aunque no es asincrono ni conecta con BD sql de azure, y el nombre de la categoria no lo recoge
+        //public IActionResult CrearProductosCasa([FromBody] ProductCreatedDto productCreatedDto)
+        //{
+        //    var product = new Product();
+
+        //    _mapper.Map(productCreatedDto, product);
+
+        //    _productsDbContext.Products.Add(product);
+
+        //    var resultado = _productsDbContext.SaveChanges();
+
+        //    return Created("", productCreatedDto);
+        //}
 
         [HttpPost]
-
-        public async Task<IActionResult> CreateProduct([FromBody]ProductCreatedDto productCreatedDto) 
+        public async Task<IActionResult> CreateProduct([FromBody] ProductCreatedDto productCreatedDto)
         {
             var product = new Product();
 
@@ -79,8 +91,6 @@ namespace Microservicio_Productos.Controllers
 
             var dtomarketing = new marketingDto() { idProducto = product.ProductId };
 
-            
-
             var mensaje = new MensajeCreacion { ProductId = product.ProductId, Id = Guid.NewGuid(), CreationDateTime = DateTime.Now };
 
             var serviceBusConnectionString = configuration.GetValue<string>("ServiceBusConnectionString");
@@ -89,10 +99,8 @@ namespace Microservicio_Productos.Controllers
 
             await CrearProductoEnMarketing(dtomarketing);
 
-           return Created("", productCreatedDto);
+            return Created("", productCreatedDto);
 
-            
-        
         }
 
         private async Task CrearProductoEnMarketing(marketingDto producto)
